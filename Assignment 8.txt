@@ -1,0 +1,368 @@
+1. Open Firebase
+
+Open this in Chrome:
+
+https://console.firebase.google.com
+
+Click:
+Create a project
+
+2. Create Project
+
+Project name:
+firebase-auth-practical
+
+Click:
+Continue
+
+Google Analytics:
+Disable
+
+Click:
+Create project
+
+Wait, then click:
+Continue
+
+3. Add Web App
+
+On project dashboard, click this icon:
+</>
+
+App nickname:
+auth-web-app
+
+Click:
+Register app
+
+Now Firebase will show this type of code:
+
+const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
+};
+
+Copy it somewhere.
+Click:
+Continue to console
+
+
+4. Enable Authentication
+
+Left side menu:
+Build → Authentication
+
+Click:
+Get started
+
+Click:
+Email/Password
+
+Turn ON:
+Email/Password
+
+Click:
+Save
+
+5. Enable Firestore Database
+
+Left side menu:
+Build → Firestore Database
+
+Click:
+Create database
+
+Choose:
+Start in test mode
+
+Click:
+Next
+
+Select location:
+asia-south1
+
+Click:
+Enable
+
+6. Create Project Folder
+
+On Desktop, create folder:
+firebase-auth-practical
+
+Open this folder in VS Code.
+
+Inside it create one file:
+index.html
+
+7. Paste This Full Code in index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Firebase Authentication Practical</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    .box {
+      background: white;
+      width: 400px;
+      margin: auto;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px gray;
+    }
+
+    input {
+      width: 90%;
+      padding: 12px;
+      margin: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 25px;
+      margin: 10px;
+      background: #1a73e8;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #0b57d0;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+    <h1>Firebase Authentication</h1>
+    <h3>Register / Login User</h3>
+
+    <input type="email" id="email" placeholder="Enter Email">
+    <br>
+
+    <input type="password" id="password" placeholder="Enter Password">
+    <br>
+
+    <button onclick="registerUser()">Register</button>
+    <button onclick="loginUser()">Login</button>
+
+    <p id="message"></p>
+  </div>
+
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "PASTE_YOUR_API_KEY",
+      authDomain: "PASTE_YOUR_AUTH_DOMAIN",
+      projectId: "PASTE_YOUR_PROJECT_ID",
+      storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
+      messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
+      appId: "PASTE_YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.registerUser = async function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+        await setDoc(doc(db, "users", userCredential.user.uid), {
+          uid: userCredential.user.uid,
+          email: email,
+          createdAt: new Date().toString(),
+          status: "Registered Successfully"
+        });
+
+        document.getElementById("message").innerText =
+          "User registered and stored successfully";
+
+      } catch (error) {
+        document.getElementById("message").innerText = error.message;
+      }
+    }
+
+    window.loginUser = async function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+        await setDoc(doc(db, "users", userCredential.user.uid), {
+          uid: userCredential.user.uid,
+          email: email,
+          lastLogin: new Date().toString(),
+          status: "Login Verified"
+        }, { merge: true });
+
+        document.getElementById("message").innerText =
+          "Login successful. User verified and updated in Firestore";
+
+      } catch (error) {
+        document.getElementById("message").innerText = error.message;
+      }
+    }
+
+  </script>
+
+</body>
+</html>
+
+
+8. Run the Project
+
+Right-click index.html.
+
+Click:
+Open with Live Server
+
+If Live Server is not installed:
+
+Open VS Code.
+Go to Extensions.
+Search:
+Live Server
+Install extension by Ritwick Dey.
+Right-click index.html.
+Click:
+Open with Live Server
+
+
+
+9. KEY :
+
+ const firebaseConfig = {
+  apiKey: "AIzaSyAPWvTIn6MYC_XsBfnYiuCynoCRbET-L60",
+  authDomain: "fir-auth-practical-e3b6c.firebaseapp.com",
+  projectId: "fir-auth-practical-e3b6c",
+  storageBucket: "fir-auth-practical-e3b6c.firebasestorage.app",
+  messagingSenderId: "650639872771",
+  appId: "1:650639872771:web:ea0989e57b3e7b85e5cf36"
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+11. Check Firebase Authentication Output
+
+Go to Firebase Console:
+
+Build → Authentication → Users
+
+You will see:
+
+testuser@gmail.com
+
+This proves user credentials are verified using Firebase Authentication.
+
+12. Check Firestore Output
+
+Go to:
+
+Build → Firestore Database → Data
+
+You will see collection:
+
+users
+
+Inside it, you will see stored data:
+
+uid
+email
+createdAt
+lastLogin
+status
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
