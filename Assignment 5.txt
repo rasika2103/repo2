@@ -1,0 +1,65 @@
+Assignment 5
+
+Find A Procedure to launch a virtual machine using AWS
+
+AWS EC2 Practical: Start to End Steps with Commands
+1. Login to AWS
+
+Open AWS Management Console → Search EC2 → Open EC2 Dashboard.
+
+2. Launch Instance
+Click Launch Instance.
+
+Fill details:
+
+Name: MyFirstVM
+AMI: Amazon Linux
+Instance type: t2.micro
+Key pair: Create new key pair → download .pem
+Security group: Allow:
+SSH → Port 22
+HTTP → Port 80
+Storage: 8 GB default
+Click Launch Instance
+
+3. Connect to VM
+
+Go to Instances → Select your instance → Click Connect → Choose EC2 Instance Connect → Click Connect.
+
+You should see terminal like:
+
+[ec2-user@ip-172-31-40-57 ~]$
+
+4. Update System
+sudo yum update -y
+
+5. Install Apache Web Server
+sudo yum install httpd -y
+
+6. Start Apache
+sudo systemctl start httpd
+
+7. Enable Apache on Boot
+sudo systemctl enable httpd
+
+8. Check Apache Status
+sudo systemctl status httpd
+
+Expected:
+active (running)
+Press q to exit status screen.
+
+9. Create Your Own Webpage
+echo "<h1>Hello Mohit - My AWS EC2 Server is Working!</h1>" | sudo tee /var/www/html/index.html
+
+10. Open Output in Browser
+Use your EC2 Public IPv4 address:
+http://your-public-ip
+
+Example:
+http://56.228.30.171
+
+11. Expected Output
+Browser should show:
+
+Hello Mohit - My AWS EC2 Server is Working!

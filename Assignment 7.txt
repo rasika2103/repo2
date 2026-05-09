@@ -1,0 +1,122 @@
+Assignment 7
+
+Creates lambda function that triggers on S3 upload or HTTP call
+
+ Part A: Lambda Trigger on S3 Upload
+Step 1: Login to AWS
+
+Open AWS Console → search S3.
+
+Step 2: Create S3 Bucket
+Click Create bucket
+Bucket name:
+my-lambda-upload-bucket-yourname
+Region: keep default
+Keep all default settings
+Click Create bucket
+
+Step 3: Create Lambda Function
+Search Lambda
+Click Create function
+Select Author from scratch
+Function name:
+S3TriggerFunction
+Runtime: Python 3.12 or latest Python
+Click Create function
+
+
+Step 4: Add Lambda Code
+import json
+
+def lambda_handler(event, context):
+    print("S3 Upload Event Received")
+    print(json.dumps(event))
+
+    for record in event['Records']:
+        bucket_name = record['s3']['bucket']['name']
+        file_name = record['s3']['object']['key']
+
+        print("File uploaded:", file_name)
+        print("Bucket name:", bucket_name)
+
+    return {
+        'statusCode': 200,
+        'body': 'S3 Trigger Executed Successfully'
+    }
+
+Step 5: Add S3 Trigger
+In Lambda function page, click Add trigger
+Select source: S3
+Choose your bucket
+Event type: All object create events
+Tick acknowledgement checkbox
+Click Add
+
+Step 6: Test S3 Trigger
+Go to S3
+Open your bucket
+Click Upload
+Add any file, for example test.txt
+Click Upload
+
+Step 7: Check Output
+Go to Lambda
+Open S3TriggerFunction
+Go to Monitor
+Click View CloudWatch logs
+Open latest log stream
+
+Part B: Lambda Trigger by HTTP Call
+
+Step 1: Create Another Lambda Function
+Go to Lambda
+Click Create function
+Select Author from scratch
+Function name:
+HttpTriggerFunction
+Runtime: Python 3.12
+Click Create function
+
+Step 2: Add HTTP Lambda Code
+
+import json
+
+def lambda_handler(event, context):
+    name = "Guest"
+
+    if event.get("queryStringParameters") is not None:
+        name = event["queryStringParameters"].get("name", "Guest")
+
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'text/html'
+        },
+        'body': f'''
+        <html>
+        <body>
+            <h1>Hello, {name}!</h1>
+            <h2>Welcome to AWS Lambda HTTP Trigger Practical</h2>
+            <p>This output is generated using Lambda and API Gateway.</p>
+        </body>
+        </html>
+        '''
+    }
+
+Click Deploy.
+
+Step 3: Add API Gateway Trigger
+In Lambda page, click Add trigger
+Select API Gateway
+Choose Create a new API
+API type: HTTP API
+Security: Open
+Click Add
+
+Step 4: Copy API URL
+After trigger is created, you will see an API endpoint, like:
+https://abc123.execute-api.ap-south-1.amazonaws.com/default/HttpTriggerFunction
+
+Step 5: Test in Browser
+Open:
+https://your-api-url?name=Mohit

@@ -1,0 +1,204 @@
+Assignment 4 
+
+Find a procedure to transfer the files from one virtual machine to another virtual machine.
+
+steps:- 
+STEP 1 — Login to AWS
+Open browser
+Go to:
+Amazon Web Services
+Sign in to AWS Console
+STEP 2 — Open EC2 Dashboard
+
+In AWS search bar type:
+EC2
+
+Click:
+EC2 Dashboard
+STEP 3 — Launch Source VM
+Create First Virtual Machine
+1. Click
+Launch Instance
+2. Instance Name
+Source-VM
+3. Select Operating System
+
+Choose:
+
+Amazon Linux 2023 AMI
+4. Instance Type
+
+Choose:
+
+t2.micro
+(Free Tier)
+
+5. Create Key Pair
+Click:
+Create new key pair
+
+Name:
+mykey1
+
+Type:
+RSA
+
+Format:
+.pem
+
+Click:
+Create key pair
+
+Key downloads automatically.
+6. Network Settings
+
+Enable:
+Allow SSH traffic
+
+Source:
+Anywhere
+7. Launch Instance
+
+Click:
+Launch Instance
+STEP 4 — Launch Destination VM
+
+Repeat same process.
+
+Details
+Setting	Value
+Name	Destination-VM
+AMI	Amazon Linux
+Type	t2.micro
+Key Pair	Use same key
+SSH	Enabled
+
+Click:
+Launch Instance
+
+STEP 5 — Copy Public IP Addresses
+After instances are running:
+
+Go to:
+EC2 → Instances
+
+Copy:
+VM	Public IPv4
+Source VM	Example: 56.228.xx.xx
+Destination VM	Example: 13.233.xx.xx
+STEP 6 — Open PowerShell
+
+Press:
+
+Windows + X
+
+Open:
+
+Windows PowerShell
+STEP 7 — Go to Downloads Folder
+
+Because PEM file is in Downloads.
+
+Run:
+
+cd Downloads
+STEP 8 — Connect to Source VM
+
+Run:
+ssh -i mykey1.pem ec2-user@SOURCE_PUBLIC_IP
+
+Example:
+ssh -i mykey1.pem ec2-user@56.228.32.23
+STEP 9 — Accept Connection
+
+If asked:
+Are you sure you want to continue connecting?
+Type:
+yes
+
+STEP 10 — Successful Login
+You will see:
+[ec2-user@ip-172-31-x-x ~]$
+STEP 11 — Create File in Source VM
+
+Run:
+echo "Hello from AWS VM" > test.txt
+STEP 12 — Verify File
+
+Run:
+ls
+
+Output:
+test.txt
+STEP 13 — Exit Source VM
+
+Run:
+exit
+STEP 14 — Copy PEM File into Source VM
+
+Now upload PEM file to source VM.
+
+Run:
+scp -i mykey1.pem mykey1.pem ec2-user@SOURCE_PUBLIC_IP:/home/ec2-user/
+
+Example:
+scp -i mykey1.pem mykey1.pem ec2-user@56.228.32.23:/home/ec2-user/
+STEP 15 — Login Again to Source VM
+
+Run:
+ssh -i mykey1.pem ec2-user@SOURCE_PUBLIC_IP
+STEP 16 — Check PEM File
+
+Run:
+ls
+
+You should see:
+mykey1.pem
+test.txt
+STEP 17 — Give Permission to PEM File
+
+Run:
+chmod 400 mykey1.pem
+STEP 18 — Transfer File to Destination VM
+
+Run:
+scp -i mykey1.pem test.txt ec2-user@DESTINATION_PUBLIC_IP:/home/ec2-user/
+
+Example:
+scp -i mykey1.pem test.txt ec2-user@13.233.xx.xx:/home/ec2-user/
+STEP 19 — Accept Destination Connection
+
+If asked
+Are you sure you want to continue connecting?
+
+Type:
+yes
+STEP 20 — Successful Transfer
+
+You will see:
+test.txt     100%
+STEP 21 — Exit Source VM
+
+Run:
+exit
+STEP 22 — Open Destination VM
+
+Run:
+ssh -i mykey1.pem ec2-user@DESTINATION_PUBLIC_IP
+
+Example:
+ssh -i mykey1.pem ec2-user@13.233.xx.xx
+STEP 23 — Verify File
+
+Run:
+ls
+
+Output:
+test.txt
+STEP 24 — Open File
+
+Run:
+cat test.txt
+
+Expected Output:
+Hello from AWS VM

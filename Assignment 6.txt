@@ -1,0 +1,131 @@
+Assignment 6
+
+Design and deploy web application in PaaS Environment 
+
+STEP 1: Create Project Folder
+👉 On your Desktop:
+
+Right click → New Folder
+Name it:
+flask-app
+
+STEP 2: Open Folder in VS Code
+Open VS Code
+Click File → Open Folder
+Select flask-app
+
+STEP 3: Create Required Files
+Inside this folder, create 3 files
+1. app.py:-
+
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return """
+    <html>
+    <head>
+        <title>PaaS Web App</title>
+        <style>
+            body {
+                margin: 0;
+                font-family: Arial;
+                background: linear-gradient(to right, #4facfe, #00f2fe);
+                color: white;
+                text-align: center;
+            }
+            .container {
+                margin-top: 100px;
+            }
+            h1 {
+                font-size: 50px;
+            }
+            .card {
+                background: rgba(255,255,255,0.2);
+                padding: 20px;
+                margin: 20px auto;
+                width: 50%;
+                border-radius: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🚀 My Cloud Web App</h1>
+            <p>Deployed using PaaS (Render)</p>
+
+            <div class="card">
+                <h2>Project Info</h2>
+                <p>This app is created using Flask and deployed on cloud.</p>
+            </div>
+
+            <div class="card">
+                <h2>Features</h2>
+                <p>✔ Easy Deployment</p>
+                <p>✔ Cloud Hosting</p>
+                <p>✔ Scalable Platform</p>
+            </div>
+
+            <div class="card">
+                <h2>Developed By</h2>
+                <p>Your Name</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
+if __name__ == "__main__":
+    app.run()
+
+📄 2. requirements.txt
+flask
+gunicorn
+
+3. Procfile
+web: gunicorn app:app
+
+STEP 4: Create Repository on GitHub
+Go to GitHub
+Click New Repository
+Name: flask-app
+Click Create Repository
+
+STEP 5: Upload Files (No Command Prompt)
+Open your repo
+Click Add file → Upload files
+Upload:
+app.py
+requirements.txt
+Procfile
+Click:
+Commit changes
+
+STEP 6: Connect to Render
+Open Render
+Click GitHub → Authorize
+Allow access
+Select your repo: flask-app
+
+🟢 STEP 7: Deploy Application
+Fill details:
+Environment: Python
+Build Command: pip install -r requirements.txt
+Start Command: gunicorn app:app
+Click:
+Create Web Service
+
+🟢 STEP 8: Wait for Deployment
+Render will:
+Install packages
+Build app
+Start server
+⏳ Wait 1–2 minutes
+
+
+🟢 STEP 9: Run Your Web App
+Render gives URL like:
+https://flask-app.onrender.com
+👉 Open it in browser.

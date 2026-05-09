@@ -1,0 +1,12 @@
+Assignment 2
+
+Install Google App Engine. Create hello world app and other simple web
+applications using python/java.
+
+https://google-app-engine.en.uptodown.com/windows/download
+
+Preferences:- 
+1. python path:- c://python25//pythonw
+2. app_engine path:- c://programfilesx86//google//google_appengine
+
+
